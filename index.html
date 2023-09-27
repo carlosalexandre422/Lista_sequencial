@@ -41,6 +41,7 @@
       border-radius: 5px;
       border: none;
       margin-right: 10px;
+      cursor: pointer;
       transition: all, 0.3s;
     }
     h2{
@@ -137,7 +138,7 @@
         const listItem = document.createElement('div');
         listItem.className = 'list-item';
 
-        // Define a largura proporcional com base no valor do elemento
+        // width proporc c base no val do elemento
         const widthPercentage = (lista.dados[i] / maxElement) * 100;
         listItem.style.width = `${widthPercentage}%`;
 
