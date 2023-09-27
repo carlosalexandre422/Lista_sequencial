@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Lista Sequencial</title>
+  <style>
+    /* Estilos básicos */
+    body {
+      font-family: Roboto;
+    }
+    .container {
+      margin: 20px;
+    }
+    .list-container {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+    }
+    .list-item {
+      display: inline-block;
+      margin-right: 10px;
+      background-color: #8dc0e2;
+      color: white;
+      padding: 5px 10px;
+      border: 1px solid #334552;
+      border-radius: 5px;
+      transition: all, 0.3s;
+    }
+    button:hover, .list-item:hover {
+      background-color: #455c6d;
+    }
+    .arrow {
+      color: #3498db;
+      width: 20px;
+      height: 20px;
+      margin: 0 10px;
+    }
+    button{
+      background-color: #3498db;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 5px;
+      border: none;
+      margin-right: 10px;
+      transition: all, 0.3s;
+    }
+    h2{
+      color: #204158;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Lista Sequencial</h2>
+    <button onclick="inserirElemento()">Inserir Elemento</button>
+    <button onclick="removerElemento()">Remover Elemento</button>
+    <button onclick="consultarPorValor()">Consultar por Valor</button>
+    <button onclick="consultarPorPosicao()">Consultar por Posição</button>
+    <br><br>  
+    <div class="list-container" id="listContainer">
+    <!-- Lista será exibida aqui -->
+    </div>
+  </div>
+
+
+  <script>
+    class ListaSeq {
+      constructor() {
+        this.dados = new Array(10);
+        this.nElementos = 0;
+      }
+
+      vazia() {
+        return this.nElementos === 0;
+      }
+
+      cheia() {
+        return this.nElementos === this.dados.length;
+      }
+
+      tamanho() {
+        return this.nElementos;
+      }
+
+      elemento(pos) {
+        if (pos > this.nElementos || pos <= 0 || isNaN(pos)) {
+          return -1;
+        }
+        return this.dados[pos - 1];
+      }
+
+      posicao(valor, desloc = 0) {
+        for (let i = desloc; i < this.nElementos; i++) {
+          if (this.dados[i] === valor) {
+            return i + 1;
+          }
+        }
+        return -1;
+      }
+
+      insere(pos, valor) {
+        if (this.cheia() || pos > this.nElementos + 1 || pos <= 0 || isNaN(valor)) {
+          return false;
+        }
+
+        for (let i = this.nElementos; i >= pos; i--) {
+          this.dados[i] = this.dados[i - 1];
+        }
+
+        this.dados[pos - 1] = valor;
+        this.nElementos++;
+        return true;
+      }
+
+      remove(pos) {
+        if (pos > this.nElementos || pos < 1 || isNaN(pos)) {
+          return -1;
+        }
+
+        const aux = this.dados[pos - 1];
+        for (let i = pos - 1; i < this.nElementos - 1; i++) {
+          this.dados[i] = this.dados[i + 1];
+        }
+
+        this.nElementos--;
+        return aux;
+      }
+    }
+
+    const lista = new ListaSeq();
+    const listContainer = document.getElementById('listContainer');
+
+    function renderizarLista() {
+      listContainer.innerHTML = '';
+
+      const maxElement = Math.max(...lista.dados);
+      for (let i = 0; i < lista.nElementos; i++) {
+        const listItem = document.createElement('div');
+        listItem.className = 'list-item';
+
+        // Define a largura proporcional com base no valor do elemento
+        const widthPercentage = (lista.dados[i] / maxElement) * 100;
+        listItem.style.width = `${widthPercentage}%`;
+
+        listItem.textContent = lista.dados[i];
+        listContainer.appendChild(listItem);
+      }
+    }
+
+    function inserirElemento() {
+      const pos = parseInt(prompt('Digite a posição de inserção:'));
+      const valor = parseInt(prompt('Digite o valor a ser inserido:'));
+      const sucesso = lista.insere(pos, valor);
+      if (sucesso) {
+        alert('Elemento inserido com sucesso!');
+      } else {
+        alert('Inserção falhou.');
+      }
+      renderizarLista();
+    }
+
+    function removerElemento() {
+      const pos = parseInt(prompt('Digite a posição de remoção:'));
+      const valorRemovido = lista.remove(pos);
+      if (valorRemovido !== -1) {
+        alert(`Elemento ${valorRemovido} removido com sucesso!`);
+      } else {
+        alert('Remoção falhou. Verifique a posição.');
+      }
+      renderizarLista();
+    }
+
+    function consultarPorValor() {
+      const valor = parseInt(prompt('Digite o valor a ser consultado:'));
+      const posicao = lista.posicao(valor);
+      if (posicao !== -1) {
+        alert(`O valor ${valor} está na posição ${posicao}`);
+      } else {
+        alert('Valor não encontrado na lista.');
+      }
+    }
+
+    function consultarPorPosicao() {
+      const pos = parseInt(prompt('Digite a posição a ser consultada:'));
+      const elemento = lista.elemento(pos);
+      if (elemento !== -1) {
+        alert(`O elemento na posição ${pos} é ${elemento}`);
+      } else {
+        alert('Posição inválida.');
+      }
+    }
+
+    renderizarLista(); // Renderizar a lista inicial
+  </script>
+</body>
+</html>
