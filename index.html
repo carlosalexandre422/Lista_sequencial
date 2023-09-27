@@ -98,7 +98,7 @@
       }
 
       insere(pos, valor) {
-        if (this.cheia() || pos > this.nElementos + 1 || pos <= 0 || isNaN(valor)) {
+        if (this.cheia() || pos > this.nElementos + 1 || pos <= 0 || isNaN(valor) || isNaN(pos)) {
           return false;
         }
 
