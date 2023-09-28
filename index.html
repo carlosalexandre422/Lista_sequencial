@@ -96,6 +96,10 @@
       }
 
       posicao(valor, desloc = 0) {
+        if (isNaN(valor)) {
+          alert('Valor inválido.');
+          return -1;
+        }
         for (let i = desloc; i < this.nElementos; i++) {
           if (this.dados[i] === valor) {
             return i + 1;
@@ -105,8 +109,16 @@
       }
 
       insere(pos, valor) {
-        if (this.cheia() || pos > this.nElementos + 1 || pos <= 0 || isNaN(valor) || isNaN(pos)) {
-          alert('Lista cheia ou posição inválida.');
+        if (this.cheia()) {
+          alert('Lista cheia');
+          return false;
+        }
+        if (pos > this.nElementos + 1 || pos <= 0 ||isNaN(pos)) {
+          alert('Posição inválida.');
+          return false;
+        }
+        if (isNaN(valor)) {
+          alert('Valor inválido.');
           return false;
         }
 
@@ -120,8 +132,13 @@
       }
 
       insereFinal(valor) {
-        if (this.cheia() || isNaN(valor)) {
-          alert('Lista cheia ou valor inválido.');
+        if (this.cheia()) {
+          alert('Lista cheia.');
+          return false;
+        }
+
+        if (isNaN(valor)) {
+          alert('Valor inválido.');
           return false;
         }
 
@@ -198,8 +215,9 @@
       const posicao = lista.posicao(valor);
       if (posicao !== -1) {
         alert(`O valor ${valor} está na posição ${posicao}`);
-      } else {
-        alert('Valor não encontrado na lista.');
+      }
+      else {
+        alert(`O valor não está na lista.`);
       }
     }
 
