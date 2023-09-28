@@ -14,9 +14,11 @@
       display: flex;
       flex-direction: row;
       align-items: center;
+      max-width: fit-content;
     }
     .list-item {
-      display: inline-block;
+      display: flex;
+      flex-wrap: wrap;
       margin-right: 10px;
       background-color: #6692af;
       color: white;
@@ -55,6 +57,7 @@
   <div class="container">
     <h2>Lista Sequencial</h2>
     <button onclick="inserirElemento()">Inserir Elemento</button>
+    <button onclick="inserirFinal()">Inserir Final</button>
     <button onclick="removerElemento()">Remover Elemento</button>
     <button onclick="consultarPorValor()">Consultar por Valor</button>
     <button onclick="consultarPorPosicao()">Consultar por Posição</button>
@@ -86,6 +89,7 @@
 
       elemento(pos) {
         if (pos > this.nElementos || pos <= 0 || isNaN(pos)) {
+          alert('Posição inválida.');
           return -1;
         }
         return this.dados[pos - 1];
@@ -102,6 +106,7 @@
 
       insere(pos, valor) {
         if (this.cheia() || pos > this.nElementos + 1 || pos <= 0 || isNaN(valor) || isNaN(pos)) {
+          alert('Lista cheia ou posição inválida.');
           return false;
         }
 
@@ -114,8 +119,20 @@
         return true;
       }
 
+      insereFinal(valor) {
+        if (this.cheia() || isNaN(valor)) {
+          alert('Lista cheia ou valor inválido.');
+          return false;
+        }
+
+        this.dados[this.nElementos] = valor;
+        this.nElementos++;
+        return true;
+      }
+
       remove(pos) {
         if (pos > this.nElementos || pos < 1 || isNaN(pos)) {
+          alert('Posição inválida.');
           return -1;
         }
 
@@ -140,9 +157,8 @@
         const listItem = document.createElement('div');
         listItem.className = 'list-item';
 
-        // width proporc c base no val do elemento
         const widthPercentage = (lista.dados[i] / maxElement) * 100;
-        listItem.style.width = `${widthPercentage}%`;
+        listItem.style.flexBasis = `${widthPercentage}%`;
 
         listItem.textContent = lista.dados[i];
         listContainer.appendChild(listItem);
@@ -155,8 +171,15 @@
       const sucesso = lista.insere(pos, valor);
       if (sucesso) {
         alert('Elemento inserido com sucesso!');
-      } else {
-        alert('Inserção falhou.');
+      }
+      renderizarLista();
+    }
+
+    function inserirFinal() {
+      const valor = parseInt(prompt('Digite o valor a ser inserido no final:'));
+      const sucesso = lista.insereFinal(valor);
+      if (sucesso) {
+        alert('Elemento inserido com sucesso!');
       }
       renderizarLista();
     }
@@ -166,8 +189,6 @@
       const valorRemovido = lista.remove(pos);
       if (valorRemovido !== -1) {
         alert(`Elemento ${valorRemovido} removido com sucesso!`);
-      } else {
-        alert('Remoção falhou. Verifique a posição.');
       }
       renderizarLista();
     }
@@ -187,8 +208,6 @@
       const elemento = lista.elemento(pos);
       if (elemento !== -1) {
         alert(`O elemento na posição ${pos} é ${elemento}`);
-      } else {
-        alert('Posição inválida.');
       }
     }
 
